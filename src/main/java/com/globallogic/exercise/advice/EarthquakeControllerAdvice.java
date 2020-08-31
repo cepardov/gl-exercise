@@ -1,6 +1,7 @@
 package com.globallogic.exercise.advice;
 
 import com.globallogic.exercise.exception.DateSelectedException;
+import com.globallogic.exercise.exception.MagnitudeSelectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,8 @@ public class EarthquakeControllerAdvice {
 
     private static final Logger logger = LoggerFactory.getLogger(EarthquakeControllerAdvice.class);
 
-    @ExceptionHandler(DateSelectedException.class)
-    public ResponseEntity<Object> entityViolations(DateSelectedException e) {
+    @ExceptionHandler({DateSelectedException.class, MagnitudeSelectedException.class})
+    public ResponseEntity<Object> entityViolations(Exception e) {
         logger.error(e.getMessage(), e);
         Map<String, Object> response = new HashMap<>();
         response.put("message", e.getMessage());

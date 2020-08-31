@@ -1,0 +1,60 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "generated": 0,
+    "url": "",
+    "title": "",
+    "api": "",
+    "count": 0,
+    "status": 0
+  },
+  "bbox": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 0.0,
+        "place": "",
+        "time": 0,
+        "updated": 0,
+        "tz": 0,
+        "url": "",
+        "detail": "",
+        "felt": 0,
+        "cdi": 0.0,
+        "mmi": 0.0,
+        "alert": "",
+        "status": "",
+        "tsunami": 0,
+        "sig": 0,
+        "net": "",
+        "code": "",
+        "ids": "",
+        "sources": "",
+        "types": "",
+        "nst": 0,
+        "dmin": 0.0,
+        "rms": 0.0,
+        "gap": 0.0,
+        "magType": "",
+        "type": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "id": ""
+    }
+  ]
+}

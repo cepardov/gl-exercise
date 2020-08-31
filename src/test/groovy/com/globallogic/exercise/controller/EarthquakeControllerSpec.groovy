@@ -1,6 +1,7 @@
 package com.globallogic.exercise.controller
 
 import com.globallogic.exercise.dto.BetweenDatesDTO
+import com.globallogic.exercise.dto.BetweenMagnitudesDTO
 import com.globallogic.exercise.dto.ResponseDTO
 import com.globallogic.exercise.service.QueryEarthquakeService
 import org.springframework.http.HttpStatus
@@ -31,5 +32,20 @@ class EarthquakeControllerSpec extends Specification {
         res != null
         res instanceof ResponseEntity<ResponseDTO>
         res.statusCode instanceof HttpStatus
+    }
+
+    def "Consulta sismos entre 2 magnitudes"() {
+        given:
+        ResponseDTO responseDTO = Mock(ResponseDTO)
+        BetweenMagnitudesDTO betweenMagnitudesDTO = new BetweenMagnitudesDTO()
+        betweenMagnitudesDTO.minMagnitude = 1.0
+        betweenMagnitudesDTO.maxMagnitude = 2.0
+        earthquakeService.queryBetweenMagnitudes(betweenMagnitudesDTO) >> responseDTO
+        when:
+        def res = earthquakeController.queryBetweenMagnitude(betweenMagnitudesDTO)
+        then:
+        res != null
+        res instanceof ResponseEntity<ResponseDTO>
+        res.statusCode == HttpStatus.OK
     }
 }
