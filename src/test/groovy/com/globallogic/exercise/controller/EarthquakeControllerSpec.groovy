@@ -81,4 +81,20 @@ class EarthquakeControllerSpec extends Specification {
         res instanceof ResponseEntity<ResponseDTO>
         res.statusCode == HttpStatus.OK
     }
+
+    def "consulta sismos por pais entre fechas"() {
+        given:
+        ResponseDTO responseDTO = Mock(ResponseDTO)
+        def place = "Chile"
+        BetweenDatesDTO betweenDatesDTO = new BetweenDatesDTO()
+        betweenDatesDTO.startTime = LocalDate.parse("2020-08-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2020-08-02")
+        earthquakeService.countEarthquakesByPlaceAndDates(_ as String, _ as BetweenDatesDTO) >> responseDTO
+        when:
+        def res = earthquakeController.countEarthquakesByPlaceAndDates(place, betweenDatesDTO)
+        then:
+        res != null
+        res instanceof ResponseEntity<ResponseDTO>
+        res.statusCode == HttpStatus.OK
+    }
 }

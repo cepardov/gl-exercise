@@ -105,4 +105,39 @@ class QueryEarthquakeServiceSpec extends Specification {
         res.message == "Lugar/País no debe estar vacío"
     }
 
+    def "Consulta sismos por pais entre fechas"() {
+        given:
+        def place = "Chile"
+        BetweenDatesDTO betweenDatesDTO = new BetweenDatesDTO()
+        betweenDatesDTO.startTime = LocalDate.parse("2020-08-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2020-08-02")
+        when:
+        ResponseDTO responseDTO = queryEarthquakeService.countEarthquakesByPlaceAndDates(place, betweenDatesDTO)
+        then:
+        responseDTO != null
+    }
+
+    def "Consulta sismos por pais entre fechas sin place"() {
+        given:
+        def place = ""
+        BetweenDatesDTO betweenDatesDTO = new BetweenDatesDTO()
+        betweenDatesDTO.startTime = LocalDate.parse("2020-08-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2020-08-02")
+        when:
+        queryEarthquakeService.countEarthquakesByPlaceAndDates(place, betweenDatesDTO)
+        then:
+        thrown(PlaceException)
+    }
+
+    def "Consulta sismos por pais entre fechas fecha incorrecta"() {
+        given:
+        def place = "Chile"
+        BetweenDatesDTO betweenDatesDTO = new BetweenDatesDTO()
+        betweenDatesDTO.startTime = LocalDate.parse("2020-08-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2020-08-01")
+        when:
+        queryEarthquakeService.countEarthquakesByPlaceAndDates(place, betweenDatesDTO)
+        then:
+        thrown(DateSelectedException)
+    }
 }

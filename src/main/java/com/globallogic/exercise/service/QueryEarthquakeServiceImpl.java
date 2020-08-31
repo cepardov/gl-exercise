@@ -27,6 +27,8 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
 
     @Override
     public ResponseDTO queryBetweenDates(BetweenDatesDTO betweenDatesDTO) throws DateSelectedException {
+        if (betweenDatesDTO.getStartTime() == null) throw new DateSelectedException("La fecha de inicio no debe estar vacío");
+        if (betweenDatesDTO.getEndTime() == null) throw new DateSelectedException("La fecha final no debe estar vacío");
         if (!betweenDatesDTO.getStartTime().isBefore(betweenDatesDTO.getEndTime()))
             throw new DateSelectedException("Las fecha final no puede ser anterior a la de inicio");
         return restTemplate.getForObject(
@@ -71,6 +73,24 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
     public ResponseDTO queryAllQuakesByPlace(String place) throws PlaceException {
         if (place == null || place.isEmpty()) throw new PlaceException("Lugar/País no debe estar vacío");
         ResponseDTO responseDTO = restTemplate.getForObject("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson", ResponseDTO.class);
+        List<Feature> featureList = responseDTO.getFeatures().stream().filter(feature -> feature.getProperties().getPlace().toLowerCase().contains(place.toLowerCase()))
+                .collect(Collectors.toList());
+        responseDTO.setFeatures(featureList);
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO countEarthquakesByPlaceAndDates(String place, BetweenDatesDTO betweenDatesDTO) throws DateSelectedException, PlaceException {
+        if (place == null || place.isEmpty()) throw new PlaceException("Lugar/País no debe estar vacío");
+        if (betweenDatesDTO.getStartTime() == null) throw new DateSelectedException("La fecha de inicio no debe estar vacío");
+        if (betweenDatesDTO.getEndTime() == null) throw new DateSelectedException("La fecha final no debe estar vacío");
+        if (!betweenDatesDTO.getStartTime().isBefore(betweenDatesDTO.getEndTime()))
+            throw new DateSelectedException("Las fecha final no puede ser anterior a la de inicio");
+        ResponseDTO responseDTO = restTemplate.getForObject(
+                "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime={startTime}&endtime={endTime}",
+                ResponseDTO.class,
+                betweenDatesDTO.getStartTime(),
+                betweenDatesDTO.getEndTime());
         List<Feature> featureList = responseDTO.getFeatures().stream().filter(feature -> feature.getProperties().getPlace().toLowerCase().contains(place.toLowerCase()))
                 .collect(Collectors.toList());
         responseDTO.setFeatures(featureList);

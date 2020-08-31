@@ -16,4 +16,6 @@ public interface QueryEarthquakeService {
 
     ResponseDTO queryBetweenOneOrMoreDate(List<BetweenDatesDTO> betweenDatesDTOList);
     ResponseDTO queryAllQuakesByPlace(String place) throws PlaceException;
+
+    ResponseDTO countEarthquakesByPlaceAndDates(String place, BetweenDatesDTO betweenDatesDTO) throws DateSelectedException, PlaceException;
 }

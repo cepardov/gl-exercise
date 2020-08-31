@@ -46,4 +46,10 @@ public class EarthquakeController {
         ResponseDTO responseDTO = queryEarthquakeService.queryAllQuakesByPlace(place);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+    @PostMapping("/getQuakesByPlaceAndDates/{place}")
+    public ResponseEntity<ResponseDTO> countEarthquakesByPlaceAndDates(@PathVariable("place") String place, @RequestBody BetweenDatesDTO betweenDatesDTO) throws DateSelectedException, PlaceException {
+        ResponseDTO responseDTO = queryEarthquakeService.countEarthquakesByPlaceAndDates(place, betweenDatesDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
 }
