@@ -5,6 +5,7 @@ import com.globallogic.exercise.dto.BetweenMagnitudesDTO;
 import com.globallogic.exercise.dto.ResponseDTO;
 import com.globallogic.exercise.exception.DateSelectedException;
 import com.globallogic.exercise.exception.MagnitudeSelectedException;
+import com.globallogic.exercise.exception.PlaceException;
 import com.globallogic.exercise.vo.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,5 +65,15 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
             responseDTOFinal.setType(responseDTO.getType());
         });
         return responseDTOFinal;
+    }
+
+    @Override
+    public ResponseDTO queryAllQuakesByPlace(String place) throws PlaceException {
+        if (place == null || place.isEmpty()) throw new PlaceException("Lugar/País no debe estar vacío");
+        ResponseDTO responseDTO = restTemplate.getForObject("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson", ResponseDTO.class);
+        List<Feature> featureList = responseDTO.getFeatures().stream().filter(feature -> feature.getProperties().getPlace().toLowerCase().contains(place.toLowerCase()))
+                .collect(Collectors.toList());
+        responseDTO.setFeatures(featureList);
+        return responseDTO;
     }
 }

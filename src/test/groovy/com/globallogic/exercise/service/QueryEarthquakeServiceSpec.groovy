@@ -5,6 +5,7 @@ import com.globallogic.exercise.dto.BetweenMagnitudesDTO
 import com.globallogic.exercise.dto.ResponseDTO
 import com.globallogic.exercise.exception.DateSelectedException
 import com.globallogic.exercise.exception.MagnitudeSelectedException
+import com.globallogic.exercise.exception.PlaceException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 
@@ -83,6 +84,25 @@ class QueryEarthquakeServiceSpec extends Specification {
         ResponseDTO responseDTO = queryEarthquakeService.queryBetweenOneOrMoreDate(betweenDatesDTOList)
         then:
         responseDTO != null
+    }
+
+    def "Consulta sismos por pais" () {
+        given:
+        def place = "Chile"
+        when:
+        ResponseDTO responseDTO = queryEarthquakeService.queryAllQuakesByPlace(place)
+        then:
+        responseDTO != null
+    }
+
+    def "Consulta sismos por pais bad request" () {
+        given:
+        def place = ""
+        when:
+        queryEarthquakeService.queryAllQuakesByPlace(place)
+        then:
+        def res = thrown(PlaceException)
+        res.message == "Lugar/País no debe estar vacío"
     }
 
 }

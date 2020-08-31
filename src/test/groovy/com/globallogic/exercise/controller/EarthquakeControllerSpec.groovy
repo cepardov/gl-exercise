@@ -68,4 +68,17 @@ class EarthquakeControllerSpec extends Specification {
         res instanceof ResponseEntity<ResponseDTO>
         res.statusCode == HttpStatus.OK
     }
+
+    def "Consulta sismos por pais" () {
+        given:
+        ResponseDTO responseDTO = Mock(ResponseDTO)
+        def place = "Chile"
+        earthquakeService.queryAllQuakesByPlace(_ as String) >> responseDTO
+        when:
+        def res = earthquakeController.queryAllQuakesByPlace(place)
+        then:
+        res != null
+        res instanceof ResponseEntity<ResponseDTO>
+        res.statusCode == HttpStatus.OK
+    }
 }

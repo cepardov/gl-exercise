@@ -19,7 +19,7 @@ public class Properties {
     private Double mmi;
     private String net;
     private Long nst;
-    private String place;
+    private String place = "";
     private Double rms;
     private Long sig;
     private String sources;

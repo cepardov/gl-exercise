@@ -5,13 +5,11 @@ import com.globallogic.exercise.dto.BetweenMagnitudesDTO;
 import com.globallogic.exercise.dto.ResponseDTO;
 import com.globallogic.exercise.exception.DateSelectedException;
 import com.globallogic.exercise.exception.MagnitudeSelectedException;
+import com.globallogic.exercise.exception.PlaceException;
 import com.globallogic.exercise.service.QueryEarthquakeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,6 +38,12 @@ public class EarthquakeController {
     @PostMapping("/between-one-or-more-dates")
     public ResponseEntity<ResponseDTO> queryOneOrMoreDates(@RequestBody List<BetweenDatesDTO> betweenDatesDTOList) {
         ResponseDTO responseDTO = queryEarthquakeService.queryBetweenOneOrMoreDate(betweenDatesDTOList);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllByPlace/{place}")
+    public ResponseEntity<ResponseDTO> queryAllQuakesByPlace(@PathVariable("place") String place) throws PlaceException {
+        ResponseDTO responseDTO = queryEarthquakeService.queryAllQuakesByPlace(place);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }
