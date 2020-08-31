@@ -5,9 +5,14 @@ import com.globallogic.exercise.dto.BetweenMagnitudesDTO;
 import com.globallogic.exercise.dto.ResponseDTO;
 import com.globallogic.exercise.exception.DateSelectedException;
 import com.globallogic.exercise.exception.MagnitudeSelectedException;
+import com.globallogic.exercise.vo.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
@@ -40,5 +45,24 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
                 betweenMagnitudesDTO.getMinMagnitude(),
                 betweenMagnitudesDTO.getMaxMagnitude()
         );
+    }
+
+    @Override
+    public ResponseDTO queryBetweenOneOrMoreDate(List<BetweenDatesDTO> betweenDatesDTOList) {
+        ResponseDTO responseDTOFinal = new ResponseDTO();
+        betweenDatesDTOList.forEach(betweenDatesDTO -> {
+            ResponseDTO responseDTO = restTemplate.getForObject(
+                    "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime={startTime}&endtime={endTime}",
+                    ResponseDTO.class,
+                    betweenDatesDTO.getStartTime(),
+                    betweenDatesDTO.getEndTime());
+            List<Double> bbox = Stream.concat(responseDTOFinal.getBbox().stream(), responseDTO.getBbox().stream()).collect(Collectors.toList());
+            List<Feature> features = Stream.concat(responseDTOFinal.getFeatures().stream(), responseDTO.getFeatures().stream()).collect(Collectors.toList());
+            responseDTOFinal.setBbox(bbox);
+            responseDTOFinal.setFeatures(features);
+            responseDTOFinal.setMetadata(responseDTO.getMetadata());
+            responseDTOFinal.setType(responseDTO.getType());
+        });
+        return responseDTOFinal;
     }
 }

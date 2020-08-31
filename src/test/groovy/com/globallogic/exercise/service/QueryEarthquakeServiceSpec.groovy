@@ -69,4 +69,20 @@ class QueryEarthquakeServiceSpec extends Specification {
         res.message == "La magnitud màxima no puede ser menor a la magnitud mínima"
     }
 
+    def "Consulta sismos entre 1 o mas fechas"() {
+        given:
+        BetweenDatesDTO betweenDatesDTO = new BetweenDatesDTO()
+        List<BetweenDatesDTO> betweenDatesDTOList = new ArrayList<>()
+        betweenDatesDTO.startTime = LocalDate.parse("2019-10-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2019-10-03")
+        betweenDatesDTOList.add(betweenDatesDTO)
+        betweenDatesDTO.startTime = LocalDate.parse("2019-10-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2019-10-03")
+        betweenDatesDTOList.add(betweenDatesDTO)
+        when:
+        ResponseDTO responseDTO = queryEarthquakeService.queryBetweenOneOrMoreDate(betweenDatesDTOList)
+        then:
+        responseDTO != null
+    }
+
 }

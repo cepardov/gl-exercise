@@ -48,4 +48,24 @@ class EarthquakeControllerSpec extends Specification {
         res instanceof ResponseEntity<ResponseDTO>
         res.statusCode == HttpStatus.OK
     }
+
+    def "Consulta sismos entre 1 o mas fechas"() {
+        given:
+        ResponseDTO responseDTO = Mock(ResponseDTO)
+        BetweenDatesDTO betweenDatesDTO = new BetweenDatesDTO()
+        List<BetweenDatesDTO> betweenDatesDTOList = new ArrayList<>()
+        betweenDatesDTO.startTime = LocalDate.parse("2019-10-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2019-10-03")
+        betweenDatesDTOList.add(betweenDatesDTO)
+        betweenDatesDTO.startTime = LocalDate.parse("2019-10-01")
+        betweenDatesDTO.endTime = LocalDate.parse("2019-10-03")
+        betweenDatesDTOList.add(betweenDatesDTO)
+        earthquakeService.queryBetweenOneOrMoreDate(_ as List<BetweenDatesDTO>) >> responseDTO
+        when:
+        def res = earthquakeController.queryOneOrMoreDates(betweenDatesDTOList)
+        then:
+        res != null
+        res instanceof ResponseEntity<ResponseDTO>
+        res.statusCode == HttpStatus.OK
+    }
 }

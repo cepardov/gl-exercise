@@ -6,8 +6,12 @@ import com.globallogic.exercise.dto.ResponseDTO;
 import com.globallogic.exercise.exception.DateSelectedException;
 import com.globallogic.exercise.exception.MagnitudeSelectedException;
 
+import java.util.List;
+
 public interface QueryEarthquakeService {
 
     ResponseDTO queryBetweenDates(BetweenDatesDTO betweenDatesDTO) throws DateSelectedException;
     ResponseDTO queryBetweenMagnitudes(BetweenMagnitudesDTO betweenMagnitudesDTO) throws MagnitudeSelectedException;
+
+    ResponseDTO queryBetweenOneOrMoreDate(List<BetweenDatesDTO> betweenDatesDTOList);
 }

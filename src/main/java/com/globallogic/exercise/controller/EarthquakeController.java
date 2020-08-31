@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/earthquake")
 public class EarthquakeController {
@@ -32,6 +34,12 @@ public class EarthquakeController {
     @PostMapping("/between-magnitude")
     public ResponseEntity<ResponseDTO> queryBetweenMagnitude(@RequestBody BetweenMagnitudesDTO betweenMagnitudesDTO) throws MagnitudeSelectedException {
         ResponseDTO responseDTO = queryEarthquakeService.queryBetweenMagnitudes(betweenMagnitudesDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/between-one-or-more-dates")
+    public ResponseEntity<ResponseDTO> queryOneOrMoreDates(@RequestBody List<BetweenDatesDTO> betweenDatesDTOList) {
+        ResponseDTO responseDTO = queryEarthquakeService.queryBetweenOneOrMoreDate(betweenDatesDTOList);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }
