@@ -25,6 +25,12 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
         this.restTemplate = restTemplate;
     }
 
+    /**
+     * Obtiene información de una API de usgs que retorna detalles de sismos ocurridos entre 2 fechas
+     * @param betweenDatesDTO DTO que contiene 2 parametros inicio y fin del tipo LocalDate
+     * @return Datos de sismos en cuanto a cnsulta y una lista de los eventos ocurridos
+     * @throws DateSelectedException Excepcion que retorna si las validaciones no son correctas
+     */
     @Override
     public ResponseDTO queryBetweenDates(BetweenDatesDTO betweenDatesDTO) throws DateSelectedException {
         if (betweenDatesDTO.getStartTime() == null) throw new DateSelectedException("La fecha de inicio no debe estar vacío");
@@ -38,6 +44,12 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
                 betweenDatesDTO.getEndTime());
     }
 
+    /**
+     * Obtiene información de una API de usgs que retorna detalles de sismos ocurridos entre 2 magnitudes
+     * @param betweenMagnitudesDTO DTO que contiene 2 parametros min y max del tipo Decimal
+     * @return Datos de sismos en cuanto a cnsulta y una lista de los eventos ocurridos
+     * @throws MagnitudeSelectedException Excepcion que retorna si la magnitud menor es mayor que la maxima definida
+     */
     @Override
     public ResponseDTO queryBetweenMagnitudes(BetweenMagnitudesDTO betweenMagnitudesDTO) throws MagnitudeSelectedException {
         if (betweenMagnitudesDTO.getMinMagnitude() > betweenMagnitudesDTO.getMaxMagnitude())
@@ -50,6 +62,11 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
         );
     }
 
+    /**
+     * Obtiene información de una API de usgs que retorna detalles de sismos ocurridos entre 1 o mas tramos de fechas
+     * @param betweenDatesDTOList Lista de fechas entre una inicial y una final
+     * @return Datos de sismos en cuanto a cnsulta y una lista de los eventos ocurridos
+     */
     @Override
     public ResponseDTO queryBetweenOneOrMoreDate(List<BetweenDatesDTO> betweenDatesDTOList) {
         ResponseDTO responseDTOFinal = new ResponseDTO();
@@ -69,6 +86,12 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
         return responseDTOFinal;
     }
 
+    /**
+     * Obtiene información de una API de usgs que retorna detalles de sismos ocurridos filtrados por pais
+     * @param place Cadena de texto correspondiente a pais/lugar
+     * @return Datos de sismos en cuanto a cnsulta y una lista de los eventos ocurridos
+     * @throws PlaceException Excepcion si la cadena de texto no es valida
+     */
     @Override
     public ResponseDTO queryAllQuakesByPlace(String place) throws PlaceException {
         if (place == null || place.isEmpty()) throw new PlaceException("Lugar/País no debe estar vacío");
@@ -79,6 +102,14 @@ public class QueryEarthquakeServiceImpl implements QueryEarthquakeService {
         return responseDTO;
     }
 
+    /**
+     * Obtiene información de una API de usgs que retorna detalles de sismos ocurridos filtrados por lugar y entre 2 fechas
+     * @param place Termino de filtrado del lugar
+     * @param betweenDatesDTO Fecha inicio y fecha fin
+     * @return Datos de sismos en cuanto a cnsulta y una lista de los eventos ocurridos
+     * @throws DateSelectedException Excepcion que retorna si las validaciones no son correctas
+     * @throws PlaceException Excepcion si la cadena de texto no es valida
+     */
     @Override
     public ResponseDTO countEarthquakesByPlaceAndDates(String place, BetweenDatesDTO betweenDatesDTO) throws DateSelectedException, PlaceException {
         if (place == null || place.isEmpty()) throw new PlaceException("Lugar/País no debe estar vacío");

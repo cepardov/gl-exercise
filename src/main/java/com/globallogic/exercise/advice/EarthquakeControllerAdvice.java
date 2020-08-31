@@ -25,4 +25,12 @@ public class EarthquakeControllerAdvice {
         response.put("message", e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> generalExceptions(Exception e) {
+        logger.error(e.getMessage(), e);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

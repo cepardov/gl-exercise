@@ -1,5 +1,6 @@
 package com.globallogic.exercise.handler;
 
+import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
@@ -18,17 +19,20 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
                 .series() == HttpStatus.Series.SERVER_ERROR);
     }
 
+    @SneakyThrows
     @Override
     public void handleError(ClientHttpResponse httpResponse) throws IOException {
         if (httpResponse.getStatusCode()
                 .series() == HttpStatus.Series.SERVER_ERROR) {
             // handle SERVER_ERROR
+            throw new Exception("Error de comunicación con servicio");
         } else if (httpResponse.getStatusCode()
                 .series() == HttpStatus.Series.CLIENT_ERROR) {
             // handle CLIENT_ERROR
-            if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
+            throw new Exception("Error de usuario");
+            //if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
                 //throw new NotFound
-            }
+            //}
         }
     }
 }
