@@ -1,6 +1,6 @@
 ## _GLExcercise_
 
-`Java 8`
+`Java 8 --`
 `Gradle`
 `Spock`
 
